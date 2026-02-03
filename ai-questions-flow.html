@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI Dynamic Questions Flow Animation</title>
+  <title>AI Dynamic Questions Flow</title>
   <style>
     * {
       margin: 0;
@@ -16,303 +16,258 @@
       justify-content: center;
       align-items: center;
       min-height: 100vh;
-      background: #f8f9fa;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      background: #f5f5f5;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     }
 
-    .animation-container {
+    .container {
       width: 100%;
-      max-width: 1200px;
-      padding: 40px;
+      max-width: 1100px;
+      padding: 20px;
     }
 
-    /* Loading dots animation */
+    /* Loading dots blink animation */
     @keyframes blink {
-      0%, 100% { opacity: 0.3; }
+      0%, 100% { opacity: 0.4; }
       50% { opacity: 1; }
     }
 
-    .loading-dot {
-      animation: blink 1.4s infinite ease-in-out;
-    }
+    .dot-1 { animation: blink 1.5s ease-in-out infinite; animation-delay: 0s; }
+    .dot-2 { animation: blink 1.5s ease-in-out infinite; animation-delay: 0.3s; }
+    .dot-3 { animation: blink 1.5s ease-in-out infinite; animation-delay: 0.6s; }
 
-    .loading-dot:nth-child(1) {
-      animation-delay: 0s;
-    }
-
-    .loading-dot:nth-child(2) {
-      animation-delay: 0.2s;
-    }
-
-    .loading-dot:nth-child(3) {
-      animation-delay: 0.4s;
-    }
-
-    /* Flow animation for lines */
-    @keyframes flowToCenter {
-      0% {
-        stroke-dashoffset: 20;
-      }
-      100% {
-        stroke-dashoffset: 0;
-      }
-    }
-
-    @keyframes flowFromCenter {
-      0% {
-        stroke-dashoffset: 30;
-      }
-      100% {
-        stroke-dashoffset: 0;
-      }
-    }
-
-    .flow-line-input {
-      stroke-dasharray: 8 4;
-      animation: flowToCenter 0.8s linear infinite;
-    }
-
-    .flow-line-output {
-      stroke-dasharray: 6 6;
-      animation: flowFromCenter 1s linear infinite;
-    }
-
-    /* Pulse animation for the selected card */
-    @keyframes subtlePulse {
-      0%, 100% {
-        filter: drop-shadow(0 4px 12px rgba(34, 197, 94, 0.15));
-      }
-      50% {
-        filter: drop-shadow(0 4px 20px rgba(34, 197, 94, 0.3));
-      }
-    }
-
-    .selected-card {
-      animation: subtlePulse 2s ease-in-out infinite;
-    }
-
-    /* Gradient animation for flow effect */
-    @keyframes gradientMove {
-      0% { stop-color: #22c55e; stop-opacity: 0.3; }
-      50% { stop-color: #22c55e; stop-opacity: 1; }
-      100% { stop-color: #22c55e; stop-opacity: 0.3; }
+    /* Glow pulse animation for light traveling effect */
+    @keyframes glowPulse {
+      0%, 100% { opacity: 0; }
+      50% { opacity: 1; }
     }
   </style>
 </head>
 <body>
-  <div class="animation-container">
-    <svg viewBox="0 0 1000 500" xmlns="http://www.w3.org/2000/svg">
+  <div class="container">
+    <svg viewBox="0 0 900 420" xmlns="http://www.w3.org/2000/svg">
       <defs>
-        <!-- Shadow filter for cards -->
-        <filter id="cardShadow" x="-20%" y="-20%" width="140%" height="140%">
-          <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#000" flood-opacity="0.08"/>
+        <!-- Card shadow -->
+        <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+          <feDropShadow dx="0" dy="2" stdDeviation="6" flood-color="#000" flood-opacity="0.06"/>
         </filter>
 
-        <!-- Shadow filter for center block -->
+        <!-- Center block shadow -->
         <filter id="centerShadow" x="-50%" y="-50%" width="200%" height="200%">
-          <feDropShadow dx="0" dy="8" stdDeviation="16" flood-color="#000" flood-opacity="0.15"/>
+          <feDropShadow dx="0" dy="6" stdDeviation="12" flood-color="#000" flood-opacity="0.12"/>
         </filter>
 
-        <!-- Gradient for green flow line -->
-        <linearGradient id="greenFlowGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stop-color="#22c55e" stop-opacity="0.4"/>
-          <stop offset="50%" stop-color="#22c55e" stop-opacity="1"/>
-          <stop offset="100%" stop-color="#22c55e" stop-opacity="0.4"/>
-        </linearGradient>
+        <!-- Glow filter for light effect -->
+        <filter id="glow" x="-100%" y="-100%" width="300%" height="300%">
+          <feGaussianBlur stdDeviation="4" result="blur"/>
+          <feMerge>
+            <feMergeNode in="blur"/>
+            <feMergeNode in="SourceGraphic"/>
+          </feMerge>
+        </filter>
 
-        <!-- Arrow marker for green line -->
-        <marker id="arrowGreen" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
-          <path d="M0,0 L0,6 L9,3 z" fill="#22c55e"/>
+        <!-- Green arrow marker -->
+        <marker id="arrowGreen" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L6,3 z" fill="#22c55e"/>
         </marker>
 
-        <!-- Arrow marker for red line -->
-        <marker id="arrowRed" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
-          <path d="M0,0 L0,6 L9,3 z" fill="#ef4444"/>
+        <!-- Red arrow marker -->
+        <marker id="arrowRed" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L6,3 z" fill="#ef4444"/>
         </marker>
+
+        <!-- Path for input line (left to center) -->
+        <path id="inputPath" d="M 248 195 C 290 195, 320 185, 355 185" fill="none"/>
+
+        <!-- Path for output line (center to question 2b) -->
+        <path id="outputPath" d="M 445 195 C 500 195, 530 205, 595 205" fill="none"/>
       </defs>
 
-      <!-- ==================== LEFT CARD - Question 1 ==================== -->
-      <g transform="translate(30, 100)">
-        <rect x="0" y="0" width="280" height="300" rx="16" ry="16" fill="white" filter="url(#cardShadow)"/>
+      <!-- ========== LEFT CARD - Question 1 ========== -->
+      <g transform="translate(20, 50)">
+        <rect width="230" height="290" rx="14" fill="white" filter="url(#shadow)"/>
 
-        <!-- Header with green dot -->
-        <circle cx="30" cy="35" r="8" fill="#22c55e"/>
-        <text x="50" y="40" font-size="16" fill="#374151" font-weight="500">question 1</text>
+        <!-- Green dot + title -->
+        <circle cx="22" cy="28" r="5" fill="#22c55e"/>
+        <text x="36" y="32" font-size="13" fill="#6b7280" font-weight="500">question 1</text>
 
         <!-- Placeholder lines -->
-        <rect x="20" y="70" width="240" height="10" rx="5" fill="#e5e7eb"/>
-        <rect x="20" y="90" width="200" height="10" rx="5" fill="#e5e7eb"/>
-        <rect x="20" y="110" width="160" height="10" rx="5" fill="#e5e7eb"/>
+        <rect x="18" y="52" width="195" height="8" rx="4" fill="#e5e7eb"/>
+        <rect x="18" y="68" width="170" height="8" rx="4" fill="#e5e7eb"/>
+        <rect x="18" y="84" width="140" height="8" rx="4" fill="#e5e7eb"/>
+        <rect x="18" y="100" width="110" height="8" rx="4" fill="#e5e7eb"/>
 
         <!-- Radio options -->
-        <g transform="translate(20, 150)">
+        <g transform="translate(18, 125)">
           <!-- Option 1 -->
-          <rect x="0" y="0" width="240" height="40" rx="8" fill="#f3f4f6"/>
-          <circle cx="25" cy="20" r="10" fill="none" stroke="#d1d5db" stroke-width="2"/>
-          <rect x="50" y="14" width="160" height="12" rx="6" fill="#d1d5db"/>
+          <rect width="195" height="36" rx="6" fill="#f9fafb"/>
+          <circle cx="20" cy="18" r="8" fill="none" stroke="#d1d5db" stroke-width="1.5"/>
+          <rect x="38" y="12" width="130" height="10" rx="5" fill="#e5e7eb"/>
 
           <!-- Option 2 -->
-          <rect x="0" y="50" width="240" height="40" rx="8" fill="#f3f4f6"/>
-          <circle cx="25" cy="70" r="10" fill="none" stroke="#d1d5db" stroke-width="2"/>
-          <rect x="50" y="64" width="140" height="12" rx="6" fill="#d1d5db"/>
+          <rect y="44" width="195" height="36" rx="6" fill="#f9fafb"/>
+          <circle cx="20" cy="62" r="8" fill="none" stroke="#d1d5db" stroke-width="1.5"/>
+          <rect x="38" y="56" width="110" height="10" rx="5" fill="#e5e7eb"/>
 
           <!-- Option 3 -->
-          <rect x="0" y="100" width="240" height="40" rx="8" fill="#f3f4f6"/>
-          <circle cx="25" cy="120" r="10" fill="none" stroke="#d1d5db" stroke-width="2"/>
-          <rect x="50" y="114" width="180" height="12" rx="6" fill="#d1d5db"/>
+          <rect y="88" width="195" height="36" rx="6" fill="#f9fafb"/>
+          <circle cx="20" cy="106" r="8" fill="none" stroke="#d1d5db" stroke-width="1.5"/>
+          <rect x="38" y="100" width="145" height="10" rx="5" fill="#e5e7eb"/>
         </g>
       </g>
 
-      <!-- ==================== CENTER BLOCK - AI ==================== -->
-      <g transform="translate(420, 175)">
-        <!-- Loading dots above -->
-        <g class="loading-dots" transform="translate(50, -30)">
-          <circle class="loading-dot" cx="0" cy="0" r="6" fill="#9ca3af"/>
-          <circle class="loading-dot" cx="24" cy="0" r="6" fill="#6b7280"/>
-          <circle class="loading-dot" cx="48" cy="0" r="6" fill="#4b5563"/>
-        </g>
+      <!-- ========== CENTER BLOCK - AI ========== -->
+      <g transform="translate(355, 140)">
+        <!-- Loading dots -->
+        <circle class="dot-1" cx="32" cy="-18" r="4.5" fill="#d1d5db"/>
+        <circle class="dot-2" cx="45" cy="-18" r="4.5" fill="#9ca3af"/>
+        <circle class="dot-3" cx="58" cy="-18" r="4.5" fill="#6b7280"/>
 
-        <!-- Main AI block -->
-        <rect x="0" y="0" width="100" height="100" rx="20" ry="20" fill="#1a1a1a" filter="url(#centerShadow)"/>
+        <!-- Main block -->
+        <rect width="90" height="90" rx="16" fill="#1a1a1a" filter="url(#centerShadow)"/>
 
-        <!-- ChatGPT/OpenAI Logo -->
-        <g transform="translate(50, 50)">
-          <g fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <!-- Simplified OpenAI logo pattern -->
-            <path d="M0,-25 L0,-15 M0,15 L0,25"/>
-            <path d="M-21.6,-12.5 L-13,-7.5 M13,7.5 L21.6,12.5"/>
-            <path d="M-21.6,12.5 L-13,7.5 M13,-7.5 L21.6,-12.5"/>
-
-            <!-- Hexagon shape -->
-            <path d="M0,-20 L17.3,-10 L17.3,10 L0,20 L-17.3,10 L-17.3,-10 Z"/>
-
-            <!-- Inner connections -->
-            <path d="M0,-20 L0,-8"/>
-            <path d="M17.3,-10 L7,-4"/>
-            <path d="M17.3,10 L7,4"/>
-            <path d="M0,20 L0,8"/>
-            <path d="M-17.3,10 L-7,4"/>
-            <path d="M-17.3,-10 L-7,-4"/>
-
-            <!-- Center hexagon -->
-            <path d="M0,-8 L7,-4 L7,4 L0,8 L-7,4 L-7,-4 Z"/>
-          </g>
+        <!-- OpenAI Logo -->
+        <g transform="translate(45, 45)" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M0,-18 L15.6,-9 L15.6,9 L0,18 L-15.6,9 L-15.6,-9 Z"/>
+          <path d="M0,-18 L0,-7"/>
+          <path d="M15.6,-9 L5.5,-3.5"/>
+          <path d="M15.6,9 L5.5,3.5"/>
+          <path d="M0,18 L0,7"/>
+          <path d="M-15.6,9 L-5.5,3.5"/>
+          <path d="M-15.6,-9 L-5.5,-3.5"/>
+          <path d="M0,-7 L5.5,-3.5 L5.5,3.5 L0,7 L-5.5,3.5 L-5.5,-3.5 Z"/>
         </g>
       </g>
 
-      <!-- ==================== CONNECTION LINES ==================== -->
+      <!-- ========== CONNECTION LINES ========== -->
 
-      <!-- Left to Center (Green flow line) -->
+      <!-- Input line (left to center) - green dashed -->
       <path
-        class="flow-line-input"
-        d="M 310 250 Q 365 250 420 225"
+        d="M 248 195 C 290 195, 320 185, 355 185"
         fill="none"
         stroke="#22c55e"
-        stroke-width="2.5"
+        stroke-width="1.8"
+        stroke-dasharray="6 4"
         marker-end="url(#arrowGreen)"
       />
 
-      <!-- Center to Right cards -->
-      <!-- Top red dotted line to question 2a -->
+      <!-- Light glow traveling on input line -->
+      <circle r="6" fill="#22c55e" filter="url(#glow)" opacity="0.8">
+        <animateMotion dur="3s" repeatCount="indefinite">
+          <mpath href="#inputPath"/>
+        </animateMotion>
+        <animate attributeName="opacity" values="0;0.9;0.9;0" dur="3s" repeatCount="indefinite"/>
+      </circle>
+
+      <!-- Output line to 2a (red dotted) -->
       <path
-        d="M 520 200 Q 600 150 700 120"
+        d="M 445 165 C 490 140, 530 95, 595 75"
         fill="none"
         stroke="#ef4444"
-        stroke-width="2"
-        stroke-dasharray="6 6"
+        stroke-width="1.5"
+        stroke-dasharray="5 5"
         marker-end="url(#arrowRed)"
       />
 
-      <!-- Middle green line to question 2b (with flow animation) -->
+      <!-- Output line to 2b (green dotted) - animated -->
       <path
-        class="flow-line-output"
-        d="M 520 225 Q 600 225 700 250"
+        d="M 445 195 C 500 195, 530 205, 595 205"
         fill="none"
         stroke="#22c55e"
-        stroke-width="2.5"
+        stroke-width="1.8"
+        stroke-dasharray="6 4"
         marker-end="url(#arrowGreen)"
       />
 
-      <!-- Bottom red dotted line to question 2c -->
+      <!-- Light glow traveling on output line -->
+      <circle r="6" fill="#22c55e" filter="url(#glow)" opacity="0.8">
+        <animateMotion dur="3s" repeatCount="indefinite" begin="1.5s">
+          <mpath href="#outputPath"/>
+        </animateMotion>
+        <animate attributeName="opacity" values="0;0.9;0.9;0" dur="3s" repeatCount="indefinite" begin="1.5s"/>
+      </circle>
+
+      <!-- Output line to 2c (red dotted) -->
       <path
-        d="M 520 250 Q 600 310 700 380"
+        d="M 445 220 C 490 250, 530 295, 595 320"
         fill="none"
         stroke="#ef4444"
-        stroke-width="2"
-        stroke-dasharray="6 6"
+        stroke-width="1.5"
+        stroke-dasharray="5 5"
         marker-end="url(#arrowRed)"
       />
 
-      <!-- ==================== RIGHT CARDS ==================== -->
+      <!-- ========== RIGHT CARDS ========== -->
 
-      <!-- Question 2a (Red/Rejected) -->
-      <g transform="translate(700, 30)">
-        <rect x="0" y="0" width="260" height="150" rx="12" ry="12" fill="white" filter="url(#cardShadow)"/>
+      <!-- Question 2a (rejected) -->
+      <g transform="translate(595, 30)">
+        <rect width="220" height="115" rx="10" fill="white" filter="url(#shadow)"/>
 
-        <!-- Red dot and title -->
-        <circle cx="25" cy="30" r="6" fill="#ef4444"/>
-        <text x="42" y="35" font-size="14" fill="#374151" font-weight="500">question 2a</text>
+        <!-- Red dot + title -->
+        <circle cx="18" cy="22" r="4" fill="#ef4444"/>
+        <text x="30" y="26" font-size="11" fill="#6b7280" font-weight="500">question 2a</text>
 
         <!-- X icon -->
-        <g transform="translate(230, 20)">
-          <circle cx="0" cy="0" r="12" fill="#fef2f2"/>
-          <path d="M-4,-4 L4,4 M4,-4 L-4,4" stroke="#ef4444" stroke-width="2" stroke-linecap="round"/>
+        <g transform="translate(198, 18)">
+          <circle r="9" fill="#fef2f2"/>
+          <path d="M-3,-3 L3,3 M3,-3 L-3,3" stroke="#ef4444" stroke-width="1.5" stroke-linecap="round"/>
         </g>
 
-        <!-- Placeholder content -->
-        <rect x="20" y="55" width="180" height="8" rx="4" fill="#e5e7eb"/>
-        <rect x="20" y="70" width="140" height="8" rx="4" fill="#e5e7eb"/>
+        <!-- Content lines -->
+        <rect x="15" y="42" width="160" height="6" rx="3" fill="#e5e7eb"/>
+        <rect x="15" y="54" width="130" height="6" rx="3" fill="#e5e7eb"/>
 
         <!-- Two boxes -->
-        <rect x="20" y="95" width="100" height="40" rx="6" fill="#f3f4f6"/>
-        <rect x="135" y="95" width="100" height="40" rx="6" fill="#f3f4f6"/>
+        <rect x="15" y="72" width="90" height="32" rx="5" fill="#f3f4f6"/>
+        <rect x="115" y="72" width="90" height="32" rx="5" fill="#f3f4f6"/>
       </g>
 
-      <!-- Question 2b (Green/Selected) -->
-      <g transform="translate(700, 195)" class="selected-card">
-        <rect x="0" y="0" width="260" height="150" rx="12" ry="12" fill="white" stroke="#22c55e" stroke-width="2" filter="url(#cardShadow)"/>
+      <!-- Question 2b (selected) -->
+      <g transform="translate(595, 155)">
+        <rect width="220" height="115" rx="10" fill="white" stroke="#22c55e" stroke-width="1.5" filter="url(#shadow)"/>
 
-        <!-- Green dot and title -->
-        <circle cx="25" cy="30" r="6" fill="#22c55e"/>
-        <text x="42" y="35" font-size="14" fill="#374151" font-weight="500">question 2b</text>
+        <!-- Green dot + title -->
+        <circle cx="18" cy="22" r="4" fill="#22c55e"/>
+        <text x="30" y="26" font-size="11" fill="#6b7280" font-weight="500">question 2b</text>
 
         <!-- Checkmark icon -->
-        <g transform="translate(230, 20)">
-          <circle cx="0" cy="0" r="12" fill="#dcfce7"/>
-          <path d="M-4,0 L-1,3 L4,-3" stroke="#22c55e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <g transform="translate(198, 18)">
+          <circle r="9" fill="#dcfce7"/>
+          <path d="M-3,0 L-1,3 L4,-3" stroke="#22c55e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
         </g>
 
-        <!-- Placeholder content -->
-        <rect x="20" y="55" width="200" height="8" rx="4" fill="#e5e7eb"/>
-        <rect x="20" y="70" width="160" height="8" rx="4" fill="#e5e7eb"/>
+        <!-- Content lines -->
+        <rect x="15" y="42" width="170" height="6" rx="3" fill="#e5e7eb"/>
+        <rect x="15" y="54" width="140" height="6" rx="3" fill="#e5e7eb"/>
 
-        <!-- Two boxes with green tint -->
-        <rect x="20" y="95" width="100" height="40" rx="6" fill="#dcfce7"/>
-        <rect x="135" y="95" width="100" height="40" rx="6" fill="#dcfce7"/>
+        <!-- Two green boxes -->
+        <rect x="15" y="72" width="90" height="32" rx="5" fill="#dcfce7"/>
+        <rect x="115" y="72" width="90" height="32" rx="5" fill="#dcfce7"/>
       </g>
 
-      <!-- Question 2c (Red/Rejected) -->
-      <g transform="translate(700, 360)">
-        <rect x="0" y="0" width="260" height="150" rx="12" ry="12" fill="white" filter="url(#cardShadow)"/>
+      <!-- Question 2c (rejected) -->
+      <g transform="translate(595, 280)">
+        <rect width="220" height="115" rx="10" fill="white" filter="url(#shadow)"/>
 
-        <!-- Red dot and title -->
-        <circle cx="25" cy="30" r="6" fill="#ef4444"/>
-        <text x="42" y="35" font-size="14" fill="#374151" font-weight="500">question 2c</text>
+        <!-- Red dot + title -->
+        <circle cx="18" cy="22" r="4" fill="#ef4444"/>
+        <text x="30" y="26" font-size="11" fill="#6b7280" font-weight="500">question 2c</text>
 
         <!-- X icon -->
-        <g transform="translate(230, 20)">
-          <circle cx="0" cy="0" r="12" fill="#fef2f2"/>
-          <path d="M-4,-4 L4,4 M4,-4 L-4,4" stroke="#ef4444" stroke-width="2" stroke-linecap="round"/>
+        <g transform="translate(198, 18)">
+          <circle r="9" fill="#fef2f2"/>
+          <path d="M-3,-3 L3,3 M3,-3 L-3,3" stroke="#ef4444" stroke-width="1.5" stroke-linecap="round"/>
         </g>
 
-        <!-- Placeholder content -->
-        <rect x="20" y="55" width="190" height="8" rx="4" fill="#e5e7eb"/>
-        <rect x="20" y="70" width="150" height="8" rx="4" fill="#e5e7eb"/>
+        <!-- Content lines -->
+        <rect x="15" y="42" width="150" height="6" rx="3" fill="#e5e7eb"/>
+        <rect x="15" y="54" width="120" height="6" rx="3" fill="#e5e7eb"/>
 
         <!-- Two boxes -->
-        <rect x="20" y="95" width="100" height="40" rx="6" fill="#f3f4f6"/>
-        <rect x="135" y="95" width="100" height="40" rx="6" fill="#f3f4f6"/>
+        <rect x="15" y="72" width="90" height="32" rx="5" fill="#f3f4f6"/>
+        <rect x="115" y="72" width="90" height="32" rx="5" fill="#f3f4f6"/>
       </g>
+
     </svg>
   </div>
 </body>
