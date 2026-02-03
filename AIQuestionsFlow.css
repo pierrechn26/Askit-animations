@@ -1,0 +1,184 @@
+/**
+ * AI Questions Flow Animation Styles
+ *
+ * This CSS file contains all animations for the AI dynamic questions flow diagram.
+ * Can be used standalone or imported with the React component.
+ */
+
+/* Container styles */
+.ai-questions-flow-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.ai-questions-flow-container svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ============================================
+   LOADING DOTS ANIMATION
+   Blinking effect to symbolize AI processing
+   ============================================ */
+
+@keyframes blink {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(0.9);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.loading-dot {
+  animation: blink 1.4s infinite ease-in-out;
+  transform-origin: center;
+}
+
+.loading-dot-1,
+.loading-dot:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.loading-dot-2,
+.loading-dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.loading-dot-3,
+.loading-dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+/* ============================================
+   FLOW LINE ANIMATIONS
+   Data flowing between components
+   ============================================ */
+
+/* Input flow: Left card -> AI Center */
+@keyframes flowToCenter {
+  0% {
+    stroke-dashoffset: 20;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+.flow-line-input {
+  stroke-dasharray: 8 4;
+  animation: flowToCenter 0.8s linear infinite;
+}
+
+/* Output flow: AI Center -> Right card */
+@keyframes flowFromCenter {
+  0% {
+    stroke-dashoffset: 30;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+.flow-line-output {
+  stroke-dasharray: 6 6;
+  animation: flowFromCenter 1s linear infinite;
+}
+
+/* ============================================
+   SELECTED CARD PULSE EFFECT
+   Subtle glow on the validated question
+   ============================================ */
+
+@keyframes subtlePulse {
+  0%, 100% {
+    filter: drop-shadow(0 4px 12px rgba(34, 197, 94, 0.15));
+  }
+  50% {
+    filter: drop-shadow(0 4px 20px rgba(34, 197, 94, 0.35));
+  }
+}
+
+.selected-card {
+  animation: subtlePulse 2s ease-in-out infinite;
+}
+
+/* ============================================
+   OPTIONAL: ENHANCED ANIMATIONS
+   Uncomment for more dynamic effects
+   ============================================ */
+
+/* Glow effect for AI block on hover */
+/*
+.ai-questions-flow-container:hover .ai-block {
+  filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.3));
+  transition: filter 0.3s ease;
+}
+*/
+
+/* Particle effect along lines (advanced) */
+/*
+@keyframes particleFlow {
+  0% {
+    offset-distance: 0%;
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    offset-distance: 100%;
+    opacity: 0;
+  }
+}
+*/
+
+/* ============================================
+   RESPONSIVE ADJUSTMENTS
+   ============================================ */
+
+@media (max-width: 768px) {
+  .ai-questions-flow-container {
+    padding: 20px;
+  }
+
+  .ai-questions-flow-container svg {
+    min-height: 300px;
+  }
+}
+
+@media (max-width: 480px) {
+  .ai-questions-flow-container svg {
+    min-height: 250px;
+  }
+}
+
+/* ============================================
+   REDUCED MOTION
+   Respect user preferences
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .loading-dot,
+  .flow-line-input,
+  .flow-line-output,
+  .selected-card {
+    animation: none;
+  }
+
+  .loading-dot {
+    opacity: 0.7;
+  }
+
+  .flow-line-input,
+  .flow-line-output {
+    stroke-dasharray: none;
+  }
+}
